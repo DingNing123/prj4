@@ -1,0 +1,5 @@
+(t18) mac@MacdeMacBook-Pro prj4 % git remote -v
+origin	https://github.com/DingNing123/prj4.git (fetch)
+origin	https://github.com/DingNing123/prj4.git (push)
+
+
