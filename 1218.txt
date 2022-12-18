@@ -1,5 +1,39 @@
+(t18) mac@MacdeMacBook-Pro prj4 % git branch
+* main
+
 (t18) mac@MacdeMacBook-Pro prj4 % git remote -v
 origin	https://github.com/DingNing123/prj4.git (fetch)
 origin	https://github.com/DingNing123/prj4.git (push)
+
+(t18) mac@MacdeMacBook-Pro prj4 % git add 1218.txt
+
+(t18) mac@MacdeMacBook-Pro prj4 % git add README.md
+
+
+(t18) mac@MacdeMacBook-Pro prj4 % git status -s
+A  1218.txt
+M  README.md
+(t18) mac@MacdeMacBook-Pro prj4 % git commit -m '1218'
+[main 95125c8] 1218
+ 2 files changed, 7 insertions(+)
+ create mode 100644 1218.txt
+(t18) mac@MacdeMacBook-Pro prj4 % git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+
+(t18) mac@MacdeMacBook-Pro prj4 % git push origin main
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 455 bytes | 455.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0)
+To https://github.com/DingNing123/prj4.git
+   bbcb378..95125c8  main -> main
+
 
 
