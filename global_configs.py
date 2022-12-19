@@ -2,9 +2,11 @@ import os
 import torch
 
 #os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-os.environ["WANDB_PROGRAM"] = "main_mib.py"
+# os.environ["WANDB_PROGRAM"] = "main_mib.py"
 
-DEVICE = torch.device("cuda:0")
+# DEVICE = torch.device("cuda:0")
+DEVICE = torch.device("cpu")
+
 
 # MOSI SETTING
 ACOUSTIC_DIM = 74
