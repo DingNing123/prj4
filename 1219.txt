@@ -1,0 +1,25 @@
+1219.txt
+
+cannot import name 'swish' from 'transformers.activations'
+
+.gitignore
+
+git reset HEAD
+
+https://github.com/huggingface/transformers/blob/main/src/transformers/activations.py
+
+SiLUActivation
+
+transformer version problem:
+
+my version transformers 4.14.1
+
+from transformers.models.bert.modeling_bert import BertPreTrainedModel
+
+transformers=3.0.2=pypi_0
+
+from transformers.modeling_bert import BertPreTrainedModel
+
+ModuleNotFoundError: No module named ‘transformers.configuration_bert‘
+
+transformers/models/bert/configuration_bert.py
