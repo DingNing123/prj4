@@ -296,18 +296,8 @@ class MIB(BertPreTrainedModel):
        # self.optimizer_a = getattr(optim, 'Adam')(chain(self.proj_a.parameters(), self.transa.parameters()), lr=self.lr)
       #  self.optimizer_v = getattr(optim, 'Adam')(chain(self.proj_v.parameters(), self.transv.parameters()), lr=self.lr)
 
-
-
         self.mean = nn.AdaptiveAvgPool1d(1)
-
-      
-
         self.init_weights()
-
-
-
-
-
 
     def get_network(self, self_type='l', layers=5):
         if self_type in ['l', 'al', 'vl']:
@@ -436,9 +426,6 @@ class MIB(BertPreTrainedModel):
      #   y_m = self.classifier(outputf)
 
         return outputf
-
-
-
 
 
 
