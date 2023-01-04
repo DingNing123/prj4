@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # args
-
-# In[1]:
-
-
 import argparse
 
 parser = argparse.ArgumentParser()

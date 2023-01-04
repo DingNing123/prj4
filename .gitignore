@@ -3,3 +3,4 @@ __pycache__/
 note_books/.ipynb_checkpoints/
 .ipynb_checkpoints/
 .DS_Store
+*.swp
