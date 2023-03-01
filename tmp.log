@@ -1,0 +1,89 @@
+ipdb> ll
+    321 def prep_for_training(num_train_optimization_steps: int):
+    322     multimodal_config = MultimodalConfig(
+    323         beta_shift=args.beta_shift, dropout_prob=args.dropout_prob
+    324     )   
+    325 
+    326     if args.model == "bert-base-uncased":
+1   327         model = MIB.from_pretrained(
+    328             bert_path, multimodal_config=multimodal_config, num_labels=1,
+    329         )   
+    330 
+    331 
+    332 
+--> 333     total_para = 0
+    334     for param in model.parameters():
+    335         total_para += np.prod(param.size())
+    336     print('total parameter for the model: ', total_para)
+    337 
+    338 
+    339 
+    340     model.to(DEVICE)
+    341 
+    342     return model
+    343 
+
+
+  /Users/mac/Desktop/prj4/main_prj4.py(587)<module>()
+    586 if __name__ == "__main__":
+--> 587     main()
+    588
+
+  /Users/mac/Desktop/prj4/main_prj4.py(576)main()
+    575     model = prep_for_training(
+--> 576         num_train_optimization_steps)
+    577
+
+  /Users/mac/Desktop/prj4/main_prj4.py(328)prep_for_training()
+1   327         model = MIB.from_pretrained(
+--> 328             bert_path, multimodal_config=multimodal_config, num_labels=1,
+    329         )
+
+  /Users/mac/anaconda3/envs/t18/lib/python3.7/site-packages/transformers/modeling_utils.py(1458)from_pretrained()
+   1457                     ignore_mismatched_sizes=ignore_mismatched_sizes,
+-> 1458                     _fast_init=_fast_init,
+   1459                 )
+
+> /Users/mac/anaconda3/envs/t18/lib/python3.7/site-packages/transformers/modeling_utils.py(1478)_load_state_dict_into_model()
+   1477
+-> 1478     @classmethod
+   1479     def _load_state_dict_into_model(
+
+ipdb>
+
+
+
+
+def _get_default_logging_level():
+    """
+    If TRANSFORMERS_VERBOSITY env var is set to one of the valid choices return that as the new default level. If it is
+    not - fall back to ``_default_log_level``
+    """
+    env_level_str = os.getenv("TRANSFORMERS_VERBOSITY", None)
+    if env_level_str:
+        if env_level_str in log_levels:
+            return log_levels[env_level_str]
+        else:
+            logging.getLogger().warning(
+                f"Unknown option TRANSFORMERS_VERBOSITY={env_level_str}, "
+                f"has to be one of: { ', '.join(log_levels.keys()) }"
+            )
+    return _default_log_level
+
+
+
+
+
+ 1      "README.md"                    line 23
+  2      "main_prj4.py"                 line 357
+  6      "~/Desktop/MAG_Bert_CMGCNI/loggers.py" line 2
+  7      "loggers.py"                   line 30
+  8 #    "tmp.log"                      line 71
+  9      "main_prj4.log"                line 1
+ 10      "~/anaconda3/envs/t18/lib/python3.7/site-packages/transformers/modeling_utils.py" line 53
+ 11      "test_log.py"                  line 2
+ 12      "myapp.log"                    line 2
+ 15      "global_configs.py"            line 1
+ 18      "~/anaconda3/envs/t18/lib/python3.7/site-packages/transformers/utils/__init__.py" line 1
+ 19 %a   "~/anaconda3/envs/t18/lib/python3.7/site-packages/transformers/utils/logging.py" line 65
+ 20      "test_getenv.py"     

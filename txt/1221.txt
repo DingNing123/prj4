@@ -1,8 +1,0 @@
-1221.txt
-google colab 读取python文件
-12月22日
-解决python3.8 原地替换问题 
-        # q *= self.scaling
-        q = q * self.scaling
-        
-        

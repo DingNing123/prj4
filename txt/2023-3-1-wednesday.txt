@@ -1,3 +1,4 @@
+2022 12 18
 (t18) mac@MacdeMacBook-Pro prj4 % git branch
 * main
 
@@ -73,5 +74,88 @@ multi-view learning
 
 在所有 IB 变体中，旨在采用 IB 进行多视图学习的作品与我们的工作最相关 [41]-[45]。 李等。 [44]，吴等。 [43]，朱等人。 [45] 扩展 VIB 用于多视图学习，首先使用 VIB 约束每个视图的信息流，然后通过专家产品（PoE）[42] 获得联合表示。 同样，Wang 等人。 开发深度多视图 IB 理论，旨在最大化标签与学习的联合表示之间的互信息，并最小化每个视图的学习表示与原始表示之间的互信息 [46]。 所提出的方法与上述多视图 IB 方法的主要区别在于：1）我们开发了 E-MIB、L-MIB 和 C-MIB 来研究多模态信息瓶颈，而不是仅在每个模态上应用 IB 原理。 前瞻性地。 我们的方法设法通过 E-MIB 减少生成的多模态表示的冗余，并通过 L-MIB 过滤掉每种模态的噪声信息。 此外，C-MIB 设法结合了 L-MIB 和 E-MIB 的优点来规范化单峰和多峰表示。 总之，所提出的方法同时将 IB 原理应用于单模态表示学习和复杂的多模态表示学习，从而能够学习更具辨别力和表现力的特征； 2) 所提出的 MIB 变体是灵活的，因为它们可以集成任何融合机制，而不是像以前的多视图 IB 方法 [42]-[45] 那样仅应用 PoE。 这样，可以利用更复杂和有效的融合策略来提供更高的表达能力并探索更充分的多模态动力学，这在我们的实验中被证明是重要的（见第 IV-F 节）。 任何融合机制的兼容性是所提出的方法优于多视图 IB 方法的优点之一。 值得注意的是，Ma 等人。 [47] 提出了图像到语音合成的多模态信息瓶颈。 然而，[47]中的多模态信息瓶颈与我们的方法根本不同，其信息瓶颈主要是指设计的模型架构而不是 IB 原则。
 
+
+
+2022 12 19
+
+cannot import name 'swish' from 'transformers.activations'
+
+.gitignore
+
+git reset HEAD
+
+https://github.com/huggingface/transformers/blob/main/src/transformers/activations.py
+
+SiLUActivation
+
+transformer version problem:
+
+my version transformers 4.14.1
+
+from transformers.models.bert.modeling_bert import BertPreTrainedModel
+
+transformers=3.0.2=pypi_0
+
+from transformers.modeling_bert import BertPreTrainedModel
+
+ModuleNotFoundError: No module named ‘transformers.configuration_bert‘
+
+transformers/models/bert/configuration_bert.py
+
+dependent file : 
+/Users/mac/Desktop/big_file/mosi.pkl
+
+note_books/05.emib_debug.ipynb
+
+git push origin main
+
+Generate requirements
+
+(t18) mac@MacdeMacBook-Pro prj4 % pip install pipreqs
+Collecting pipreqs
+
+(t18) mac@MacdeMacBook-Pro prj4 % pipreqs . --encoding=utf8 --force
+INFO: Successfully saved requirements file in ./requirements.txt
+(t18) mac@MacdeMacBook-Pro prj4 % 
+
+
+2022 12 21.txt
+google colab 读取python文件
+
+2022  12月22日
+解决python3.8 原地替换问题 
+        # q *= self.scaling
+        q = q * self.scaling
+        
+
+2023年 03月 01日 星期三 18:02:51 CST
+
+/home/dn/Desktop/我的第四篇论文/prj4/txt/2023-3-1-wednesday.txxt
+
+from readme 
+
+## Question
+1.I don't want to see a long output from bert, but I can print it to a file.
+我不想看到transformers长输出问题
+answer:
+```python
+        # export TRANSFORMERS_VERBOSITY=error
+        # If you want to reduce the output of the logging warning level that comes with bert,
+        # you need to export the environment variable, which is obtained from reading the source code.
+```
+
+
+## Appendix
+
+### Que 1
+transformer version problem:  my version transformers 4.14.1
+
+from transformers.models.bert.modeling_bert import BertPreTrainedModel
+ 
+transformers=3.0.2=pypi_0 
+
+from transformers.modeling_bert import BertPreTrainedModel
+
+[multimodal sarcasm deep learning](https://github.com/DingNing123/prj4)
 
 

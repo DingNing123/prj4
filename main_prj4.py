@@ -1,36 +1,95 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import logging
 import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--dataset", type=str,
-                    choices=["mosi", "mosei"], default="mosi")
-parser.add_argument("--max_seq_length", type=int, default=50)
-parser.add_argument("--train_batch_size", type=int, default=48)
-parser.add_argument("--dev_batch_size", type=int, default=128)
-parser.add_argument("--test_batch_size", type=int, default=128)
-parser.add_argument("--n_epochs", type=int, default=50)
-parser.add_argument("--beta_shift", type=float, default=1.0)
-parser.add_argument("--dropout_prob", type=float, default=0.5)
-parser.add_argument(
-    "--model",
-    type=str,
-    choices=["bert-base-uncased"],
-    default="bert-base-uncased",
-)
-parser.add_argument("--learning_rate", type=float, default=1e-5)
-parser.add_argument("--gradient_accumulation_step", type=int, default=1)
-parser.add_argument("--warmup_proportion", type=float, default=0.1)
-parser.add_argument("--seed", type=int, default=5576)
-parser.add_argument("--mib", type=str, default='cmib')
-# python main_prj4.py --mib emib --dataset mosi --train_batch_size 32 --n_epochs 50
-# args = parser.parse_args(args=['--mib','emib','--train_batch_size','2','--n_epochs','2'])
-args = parser.parse_args()
-
 import sys
-import os
 
+def set_logging_level(loglevel='error'):
+    '''
+    set_loging_level should Call as early as possible, otherwise it will be initialized by another module.
+    This function is going to fail. See logging.basicConfig() for details
+    loglevel:"debug", "info", "warning", "error", "critical
+    # assuming loglevel is bound to the string value obtained from the
+    # command line argument. Convert to upper case to allow the user to
+    # specify --log=DEBUG or --log=debug
+    '''
+    numeric_level = getattr(logging, loglevel.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % loglevel)
+
+    logging.basicConfig(
+    # logging.basicConfig(filename='myapp.log',\
+            level=numeric_level,\
+            format='%(levelname)s : %(name)s [line:%(lineno)d]  %(asctime)s %(message)s',\
+            filemode='w',\
+            # encoding='utf-8',\  # python 3.7 not support
+            datefmt='%m/%d/%Y %I:%M:%S %p')
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--log", type=str,
+        choices=["debug", "info", "warning", "error", "critical"],
+        default="info")
+    parser.add_argument("--dataset", type=str,
+                        choices=["mosi", "mosei"], default="mosi")
+    parser.add_argument("--max_seq_length", type=int, default=50)
+    parser.add_argument("--train_batch_size", type=int, default=48)
+    parser.add_argument("--dev_batch_size", type=int, default=128)
+    parser.add_argument("--test_batch_size", type=int, default=128)
+    parser.add_argument("--n_epochs", type=int, default=50)
+    parser.add_argument("--beta_shift", type=float, default=1.0)
+    parser.add_argument("--dropout_prob", type=float, default=0.5)
+    parser.add_argument(
+        "--model",
+        type=str,
+        choices=["bert-base-uncased"],
+        default="bert-base-uncased",
+    )
+    parser.add_argument("--learning_rate", type=float, default=1e-5)
+    parser.add_argument("--gradient_accumulation_step", type=int, default=1)
+    parser.add_argument("--warmup_proportion", type=float, default=0.1)
+    parser.add_argument("--seed", type=int, default=5576)
+    parser.add_argument("--mib", type=str, default='cmib')
+    # python main_prj4.py --mib emib --dataset mosi --train_batch_size 32 --n_epochs 50
+    # args = parser.parse_args(args=['--mib','emib','--train_batch_size','2','--n_epochs','2'])
+    args = parser.parse_args()
+
+    return args
+
+args = get_args()
+# loglevel=args.log
+set_logging_level(loglevel = args.log)
+
+def test_log():
+    logging.warning('is when this event was logged.')
+    logging.info('is when this event was logged.')
+    logger = logging.getLogger(__name__)
+    logger.info("test loggerr")
+    exit(0)
+
+# test_log()
+
+import os
+import torch
+import random
+import numpy as np
+import pickle 
+import torch.nn as nn
+import wandb
+
+from tqdm import tqdm, trange
+from torch.nn import CrossEntropyLoss, L1Loss, MSELoss
+from transformers import BertTokenizer, XLNetTokenizer, get_linear_schedule_with_warmup
+from global_configs import TEXT_DIM, ACOUSTIC_DIM, VISUAL_DIM, DEVICE
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
+from sklearn.metrics import accuracy_score, f1_score
+
+# if debug is True,data will use 4 pieces 
+# for my macbook pro have no cuda.
+debug = True
+bert_path = '/Users/mac/Desktop/tools/bert-base-uncased'
 
 if args.mib == 'cmib':
     from cmib import MIB
@@ -45,24 +104,6 @@ else:
     print('error! you should choose from {cmib,emib,lmib}!')
 
 
-# transformer version problem:
-# 
-# my version transformers 4.14.1
-# 
-# from transformers.models.bert.modeling_bert import BertPreTrainedModel
-# 
-# transformers=3.0.2=pypi_0
-# 
-# from transformers.modeling_bert import BertPreTrainedModel
-
-# # def set_random_seed()
-
-# In[5]:
-
-
-import torch
-import random
-import numpy as np
 def set_random_seed(seed: int):
     """
     Helper function to seed experiment for reproducibility.
@@ -86,24 +127,8 @@ def set_random_seed(seed: int):
     torch.cuda.manual_seed_all(seed)
 
 
-# # global_strs
-
-# In[6]:
-
-
-bert_path = '/Users/mac/Desktop/tools/bert-base-uncased'
-
-
-# # def get_tokenizer(model):
-
-# In[7]:
-
-
-from transformers import BertTokenizer, XLNetTokenizer, get_linear_schedule_with_warmup
-
 def get_tokenizer(model):
     if model == "bert-base-uncased":
-        # bert_path = '/Users/mac/Desktop/tools/bert-base-uncased'
         return BertTokenizer.from_pretrained(bert_path)
 
     else:
@@ -114,12 +139,6 @@ def get_tokenizer(model):
         )
 
 
-# # def prepare_bert_input(tokens, visual, acoustic, tokenizer)
-
-# In[8]:
-
-
-from global_configs import TEXT_DIM, ACOUSTIC_DIM, VISUAL_DIM, DEVICE
 
 def prepare_bert_input(tokens, visual, acoustic, tokenizer):
     CLS = tokenizer.cls_token
@@ -154,9 +173,6 @@ def prepare_bert_input(tokens, visual, acoustic, tokenizer):
     return input_ids, visual, acoustic, input_mask, segment_ids
 
 
-# # class InputFeatures(object)
-
-# In[9]:
 
 
 class InputFeatures(object):
@@ -171,9 +187,6 @@ class InputFeatures(object):
         self.label_id = label_id
 
 
-# # def convert_to_features(examples, max_seq_length, tokenizer):
-
-# In[10]:
 
 
 def convert_to_features(examples, max_seq_length, tokenizer):
@@ -238,14 +251,7 @@ def convert_to_features(examples, max_seq_length, tokenizer):
     return features
 
 
-# # get_appropriate_dataset(data)
 
-# In[11]:
-
-
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
-
-debug = True
 def get_appropriate_dataset(data):
 
     tokenizer = get_tokenizer(args.model)
@@ -285,12 +291,6 @@ def get_appropriate_dataset(data):
     return dataset
 
 
-# # def set_up_data_loader()
-
-# In[12]:
-
-
-import pickle 
 def set_up_data_loader():
     # /Users/mac/Desktop/big_file/mosi.pkl
     with open(f"/Users/mac/Desktop/big_file/{args.dataset}.pkl", "rb") as handle:
@@ -332,21 +332,10 @@ def set_up_data_loader():
     )
 
 
-
-# # class MultimodalConfig(object) 
-
-# In[13]:
-
-
 class MultimodalConfig(object):
     def __init__(self, beta_shift, dropout_prob):
         self.beta_shift = beta_shift
         self.dropout_prob = dropout_prob
-
-
-# # def prep_for_training(num_train_optimization_steps: int)
-
-# In[14]:
 
 
 def prep_for_training(num_train_optimization_steps: int):
@@ -355,31 +344,25 @@ def prep_for_training(num_train_optimization_steps: int):
     )   
 
     if args.model == "bert-base-uncased":
+        # export TRANSFORMERS_VERBOSITY=error
+        # If you want to reduce the output of the logging warning level that comes with bert,
+        # you need to export the environment variable, which is obtained from reading the source code.
         model = MIB.from_pretrained(
             bert_path, multimodal_config=multimodal_config, num_labels=1,
         )   
    
+    exit(0)
 
     total_para = 0 
     for param in model.parameters():
         total_para += np.prod(param.size())
     print('total parameter for the model: ', total_para)
 
-
-
     model.to(DEVICE)
 
     return model
 
 
-# # def train_epoch(model, train_dataloader)
-
-# In[15]:
-
-
-import torch.nn as nn
-from tqdm import tqdm, trange
-from torch.nn import CrossEntropyLoss, L1Loss, MSELoss
 
 def train_epoch(model: nn.Module, train_dataloader: DataLoader):
     model.train()
@@ -416,9 +399,6 @@ def train_epoch(model: nn.Module, train_dataloader: DataLoader):
     return tr_loss / nb_tr_steps
 
 
-# # def eval_epoch(model, validation_dataloader)
-
-# In[16]:
 
 
 def eval_epoch(model: nn.Module, dev_dataloader: DataLoader):
@@ -454,11 +434,6 @@ def eval_epoch(model: nn.Module, dev_dataloader: DataLoader):
             nb_dev_steps += 1
 
     return dev_loss / nb_dev_steps
-
-
-# # def test_epoch(model, test_dataloader)
-
-# In[17]:
 
 
 def test_epoch(model: nn.Module, test_dataloader: DataLoader):
@@ -499,11 +474,6 @@ def test_epoch(model: nn.Module, test_dataloader: DataLoader):
     return preds, labels
 
 
-# # def multiclass_acc(test_preds_a7, test_truth_a7)
-
-# In[18]:
-
-
 def multiclass_acc(preds, truths):
     """ 
     Compute the multiclass accuracy w.r.t. groundtruth
@@ -514,13 +484,6 @@ def multiclass_acc(preds, truths):
     """
     return np.sum(np.round(preds) == np.round(truths)) / float(len(truths))
 
-
-# # def test_score_model(model, test_data_loader)
-
-# In[19]:
-
-
-from sklearn.metrics import accuracy_score, f1_score
 
 def test_score_model(model: nn.Module, test_dataloader: DataLoader, use_zero=False):
 
@@ -547,11 +510,6 @@ def test_score_model(model: nn.Module, test_dataloader: DataLoader, use_zero=Fal
 
 
     return acc, mae, corr, f_score, mult_a7
-
-
-# # def train(...)
-
-# In[20]:
 
 
 def train(
@@ -617,13 +575,6 @@ def train(
             )
         )
         '''
-
-# # def main()
-
-# In[21]:
-
-
-import wandb
 
 def main():
     print(args)
