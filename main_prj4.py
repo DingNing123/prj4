@@ -89,7 +89,9 @@ from sklearn.metrics import accuracy_score, f1_score
 # if debug is True,data will use 4 pieces 
 # for my macbook pro have no cuda.
 debug = True
-bert_path = '/Users/mac/Desktop/tools/bert-base-uncased'
+# bert_path = '/Users/mac/Desktop/tools/bert-base-uncased'
+bert_path = '/home/dn/Desktop/deep_learning_tools/bert-base-uncased'
+# /home/dn/Desktop/deep_learning_tools/bert-base-uncased
 
 if args.mib == 'cmib':
     from cmib import MIB
@@ -114,9 +116,11 @@ def set_random_seed(seed: int):
     """
 
     print("Seed: {}".format(seed))
-
-    torch.backends.cudnn.benchmark = False
-    torch.backends.cudnn.enabled = False
+    # open cuda 
+    # torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.benchmark = True
+    # torch.backends.cudnn.enabled = False
+    torch.backends.cudnn.enabled = True
     torch.backends.cudnn.deterministic = True
 
     random.seed(seed)
@@ -292,8 +296,9 @@ def get_appropriate_dataset(data):
 
 
 def set_up_data_loader():
-    # /Users/mac/Desktop/big_file/mosi.pkl
-    with open(f"/Users/mac/Desktop/big_file/{args.dataset}.pkl", "rb") as handle:
+    # /Users/mac/Desktop/big_file/mosi.pkl 
+    # /home/dn/Desktop/deep_learning_tools/mosi.pkl
+    with open(f"/home/dn/Desktop/deep_learning_tools/{args.dataset}.pkl", "rb") as handle:
         data = pickle.load(handle)
 
     train_data = data["train"]
@@ -351,7 +356,7 @@ def prep_for_training(num_train_optimization_steps: int):
             bert_path, multimodal_config=multimodal_config, num_labels=1,
         )   
    
-    exit(0)
+    # exit(0)
 
     total_para = 0 
     for param in model.parameters():

@@ -192,3 +192,37 @@ origin	https://github.com/DingNing123/prj4.git (push)
 origin	git@github.com:DingNing123/prj4.git (fetch)
 origin	git@github.com:DingNing123/prj4.git (push)
 
+2023年 03月 02日 星期四 18:01:45 CST
+I will use pdf to record code. thank you txt file ~ 
+but detail information will here, I cannot give up txt.
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/mac/Desktop/big_file/mosi.pkl'
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> /home/dn/Desktop/我的第四篇论文/prj4/main_prj4.py(296)set_up_data_loader()
+    295     # /Users/mac/Desktop/big_file/mosi.pkl
+--> 296     with open(f"/Users/mac/Desktop/big_file/{args.dataset}.pkl", "rb") as handle:
+    297         data = pickle.load(handle)
+
+(py37) dn@SSD-Panson:/media/dn/新加卷/deep_learning/第三篇论文大文件代码材料$ cp mosi.pkl /home/dn/Desktop/deep_learning_tools/
+  File "/home/dn/Desktop/我的第四篇论文/prj4/main_prj4.py", line 132, in get_tokenizer
+    return BertTokenizer.from_pretrained(bert_path)
+
+dependent file 
+/home/dn/Desktop/deep_learning_tools/bert-base-uncased
+/home/dn/Desktop/deep_learning_tools/mosi.pkl
+
+    # open cuda
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.enabled = False
+    torch.backends.cudnn.deterministic = True
+
+    # torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.benchmark = True
+    # torch.backends.cudnn.enabled = False
+    torch.backends.cudnn.enabled = True
+    torch.backends.cudnn.deterministic = True
+
+
+exit(0)
+ line:359 
+
