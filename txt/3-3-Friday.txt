@@ -240,3 +240,15 @@ line:382
 --> 318     def forward(
     319         self,
 
+
+2023年 03月 03日 星期五 12:22:47 CST
+elif args.mib == 'emib':
+    from emib import MIB
+    print('selecting emib!')
+elif args.mib == 'mymib':
+    from mymib import MIB
+    print('selecting mymib!')
+        line:277
+        self.proj_a = nn.Conv1d(74, self.d_l, kernel_size=3, stride=1, padding=1, bias=False)
+        self.proj_v = nn.Conv1d(VISUAL_DIM, self.d_l, kernel_size=3, stride=1, padding=1, bias=False)
+        self.proj_l = nn.Conv1d(768, self.d_l, kernel_size=3, stride=1, padding=1, bias=False)

@@ -53,6 +53,7 @@ def get_args():
     parser.add_argument("--seed", type=int, default=5576)
     parser.add_argument("--mib", type=str, default='cmib')
     # python main_prj4.py --mib emib --dataset mosi --train_batch_size 32 --n_epochs 50
+    # ipdb3 main_prj4.py --mib mymib --dataset mosi --train_batch_size 2 --n_epochs 2
     # args = parser.parse_args(args=['--mib','emib','--train_batch_size','2','--n_epochs','2'])
     args = parser.parse_args()
 
@@ -99,11 +100,14 @@ if args.mib == 'cmib':
 elif args.mib == 'emib':
     from emib import MIB
     print('selecting emib!')
+elif args.mib == 'mymib':
+    from mymib import MIB
+    print('selecting mymib!')
 elif args.mib == 'lmib':
     from lmib import MIB
     print('selecting lmib!')
 else:
-    print('error! you should choose from {cmib,emib,lmib}!')
+    print('error! you should choose from {cmib,emib,mymib,lmib}!')
 
 
 def set_random_seed(seed: int):
