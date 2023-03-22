@@ -339,7 +339,7 @@ class MIB(BertPreTrainedModel):
     ):
  
 
-        outputs = self.bert(
+        output_l = self.bert(
             input_ids,
             visual,
             acoustic,
@@ -351,9 +351,7 @@ class MIB(BertPreTrainedModel):
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
         )
-
-        output_l = outputs
-
+        # output_l = outputs
 
         acoustic = acoustic.transpose(1, 2)
         visual = visual.transpose(1, 2)
@@ -403,8 +401,12 @@ class MIB(BertPreTrainedModel):
         output_attentions=None,
         output_hidden_states=None,):
 
+        # add mag module,means to add parameter visual and acoustic,
+        # Note that this code is identical to the forward function; they are repeated.
         output_l = self.bert(
             input_ids,
+            visual,
+            acoustic,
             attention_mask=attention_mask,
             token_type_ids=token_type_ids,
             position_ids=position_ids,
@@ -412,8 +414,6 @@ class MIB(BertPreTrainedModel):
             inputs_embeds=inputs_embeds,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,)
-
-
 
         acoustic = acoustic.transpose(1, 2)
         visual = visual.transpose(1, 2)
@@ -594,16 +594,15 @@ class fusion(nn.Module):
     ):
 
         '''
+        The annotated code is a combination of MIB and lfdnn.
+
         mu_l, std_l = self.encode_l(x_l)
         z_l = self.reparameterise(mu_l, std_l)
         output_l =  self.decode_l(z_l)
- 
-
 
         mu_a, std_a = self.encode_a(x_a)
         z_a = self.reparameterise(mu_a, std_a)
         output_a =  self.decode_a(z_a)
-
 
         mu_v, std_v = self.encode_v(x_v)
         z_v = self.reparameterise(mu_v, std_v)
