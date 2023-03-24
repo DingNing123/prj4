@@ -33,3 +33,6 @@ PATH_FEATURE = "/home/dn/Desktop/deep_learning_tools/"
 mosi_file = "/home/dn/Desktop/deep_learning_tools/mosi.pkl"
 
 feature_file = "/media/dn/newdisk/deep_learning/2023/MustardIndepVit768.pkl"
+mustard_file = "/media/dn/newdisk/deep_learning/2023/MustardIndepVit768.pkl"
+mustard_2023_file = "/media/dn/newdisk/deep_learning/2023/Mustard2023IndepVit768.pkl"
+bert_base_uncased = "/home/dn/Desktop/deep_learning_tools/bert-base-uncased/"
