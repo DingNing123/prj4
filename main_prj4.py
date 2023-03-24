@@ -302,7 +302,9 @@ def get_appropriate_dataset(data):
 def set_up_data_loader():
     # /Users/mac/Desktop/big_file/mosi.pkl 
     # /home/dn/Desktop/deep_learning_tools/mosi.pkl
-    with open(f"/home/dn/Desktop/deep_learning_tools/{args.dataset}.pkl", "rb") as handle:
+    from global_configs import PATH_FEATURE 
+    data_path = f"{PATH_FEATURE}"+f"{args.dataset}.pkl"
+    with open(data_path, "rb") as handle:
         data = pickle.load(handle)
 
     train_data = data["train"]
